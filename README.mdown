@@ -101,7 +101,10 @@ The same in a more formal way:
         comments = post.comments
         comments.all.object_id == comments.all.object_id
 
-* There are **tests** left to be written. Run `rake coverage` to see what is still to be tested.
+* There are **tests** left to be written. Run `rake coverage` to see what is still to be tested. You might need to install the [latest](http://github.com/spicycode/rcov) `rcov` gem from GitHub if you are running Ruby 1.8.7:
+
+    gem install spicycode-rcov -s http://gems.github.com
+
 
 # Credits
 
