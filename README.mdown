@@ -68,3 +68,7 @@ Use `post.comments` like you would `Comment`, only scoped to `post`.
         comments.all.object_id == comments.all.object_id
 
 * There are **tests** left to be written. Run `rake coverage` to see what is still to be tested.
+
+# Credits
+
+Written by [Roman Le Négrate](http://roman.flucti.com) ([contact](mailto:roman.lenegrate@gmail.com)). Released under the MIT license: see the `LICENSE` file.
