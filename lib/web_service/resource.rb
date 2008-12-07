@@ -75,7 +75,10 @@ module WebService
   protected # for CRUDOperations
   
     def remote_collection
-      @remote_collection ||= self.class.instance_eval { remote_collection }.with_nesting(nesting).extend(ImplicitId).set_related_resource(self)
+      @remote_collection ||=
+        self.class.instance_eval { remote_collection }.
+        with_nesting(nesting).
+        extend(ImplicitID).set_related_resource(self)
     end
     
     def resource_class
@@ -107,7 +110,7 @@ module WebService
       end
     end
     
-    module ImplicitId
+    module ImplicitID
       def set_related_resource(resource)
         @related_resource = resource
         self
