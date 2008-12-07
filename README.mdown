@@ -4,7 +4,7 @@ REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classe
 
 ## Installation
 
-Gem coming soon.
+RubyGem coming soon.
 
 ## Usage example
 
@@ -16,7 +16,7 @@ Gem coming soon.
       
       # Optional (and possibly in subclasses):
       self.site = WebService::Site.new("https://secure.site")
-      self.credentials = ["custom", "credentials"]
+      self.credentials = ["login", "password"]
       self.element_name = "custom_element_name"
       self.singleton = true   # /foo instead of /foos/1
     end
