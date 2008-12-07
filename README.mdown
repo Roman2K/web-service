@@ -44,10 +44,10 @@ REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classe
     Post.find(99)   # raises WebService::ResourceNotFound
     
     comment = Comment.new(:post_id => 1)
-    comment.post  # => post
+    comment.post  # => Post[1]
     # => GET /posts/1
-    comment.post  # => post
-    # (cache hit)
+    comment.post  # => Post[1]
+    # => (cache hit)
 
 ### Associations
 
