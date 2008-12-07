@@ -45,11 +45,17 @@ Gem coming soon.
       post = Post.create(:title => "First post")
       # => POST /posts
     rescue WebService::ResourceInvalid
-      puts $!.response.data['errors']['error'] * "\n"
       post.body = "Like the title says."
       post.save
-      # => PUT /posts
+      # => POST /posts
     end
+    
+    post.body += " Updated."
+    post.save
+    # => PUT /posts/1
+    
+    post.destroy
+    # => DELETE /posts/1
 
 ### Fetching
 
@@ -72,7 +78,7 @@ Gem coming soon.
 
 Use `post.comments` like you would `Comment`, only scoped to `post`.
 
-    puts "First post has %d comments." % post.comments.all.size
+    post.comments.all
     # => GET /posts/1/comments
 
 Associating a comment with a post:
