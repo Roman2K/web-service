@@ -93,14 +93,14 @@ The same in a more formal way:
     post.put(:hide)
     # => PUT /posts/1/hide
     
-    post.put(:published_at, :published_at => Time.now)
-    # => PUT /posts/1/published_at {:published_at => Time.now}
+    post.put(:publish, :at => 1.hour.from_now)
+    # => PUT /posts/1/publish {:at => 1.hour.from_now}
     
-    Post.delete(:least_read)
-    # => DELETE /posts/least_read
+    Post.delete(:unpopular)
+    # => DELETE /posts/unpopular
     
-    Post.get(:most_read, :offset => 10)
-    # => GET /posts/most_read?offset=10
+    Post.get(:popular, :page => 2)
+    # => GET /posts/popular?page=2
 
 ## Formats
 

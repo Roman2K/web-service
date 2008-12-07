@@ -15,8 +15,9 @@ module WebService
       id, action, body = recognize(ARGUMENT_LAYOUT_FOR_REQUEST, *args)
       
       url = build_url_for(id, action)
+      content_type, body = perform_adjustments_for_body!(body, method, url)
       request = instantiate_request_for(method, url)
-      body &&= perform_adjustments_for_body(body, method, url, request)
+      request.content_type = content_type if content_type
       WebService.logger.info do
         "#{method.to_s.upcase} #{url}#{" (#{body.length} bytes)" if body}"
       end
@@ -71,14 +72,13 @@ module WebService
       return request
     end
     
-    def perform_adjustments_for_body(body, method, url, request)
+    def perform_adjustments_for_body!(body, method, url)
       case method
       when :post, :put
-        request.set_content_type "application/json"
-        body.to_json
+        ["application/json", body.to_json]
       else
-        url.query = body.to_query
-        nil
+        url.query = body.to_query if body.respond_to?(:to_query) && body.method(:to_query).arity <= 0
+        [nil, nil]
       end
     end
     
