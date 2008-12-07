@@ -54,8 +54,13 @@ module WebService
     end
     
     def save
-      self.attributes = (saved? ? update((id unless self.class.singleton), attributes) : create(attributes)).attributes
-      self
+      self.attributes =
+        if saved?
+          update((id unless self.class.singleton), attributes)
+        else
+          create(attributes)
+        end.attributes
+      return self
     end
     
     def saved?
@@ -64,7 +69,7 @@ module WebService
     
     def destroy
       delete
-      self
+      return self
     end
     
   protected # for CRUDOperations
