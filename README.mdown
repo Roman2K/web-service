@@ -96,17 +96,21 @@ The same in a more formal way:
 
 ### Arbitrary actions
 
-    post.put(:hide)
-    # => PUT /posts/1/hide
+All of resource classes, resource instances and association collections respond to all four HTTP verbs (`GET`, `POST`, `PUT` and `DELETE`) to issue requests to arbitrary actions.
+
+**Note:** these methods do not return resource instances, but rather plain unserialized objects, as return by the server:
+
+    Post.delete(:unpopular)         # => [{'id' => 5, ...}, ...]
+    # => DELETE /posts/unpopular
+
+    Post.get(:popular, :page => 2)  # => [{'id' => 1, ...}, ...]
+    # => GET /posts/popular?page=2
     
     post.put(:publish, :at => 1.hour.from_now)
     # => PUT /posts/1/publish {:at => 1.hour.from_now}
     
-    Post.delete(:unpopular)
-    # => DELETE /posts/unpopular
-    
-    Post.get(:popular, :page => 2)
-    # => GET /posts/popular?page=2
+    post.comments.put(:spam)
+    # => PUT /posts/1/comments/spam
 
 ## Formats
 
@@ -115,8 +119,7 @@ The same in a more formal way:
 
 ## Status
 
-* Some methods need to be **cached** in memory, like:
-
+* Some methods need to be **cached** in memory, such as:
   * association collections, so that:
 
         post.comments.object_id == post.comments.object_id
@@ -129,7 +132,6 @@ The same in a more formal way:
 * There are **tests** left to be written. Run `rake coverage` to find out what still has to be tested. Note that for RCov to work with Ruby 1.8.7, you might need to install the latest `rcov` gem from [GitHub](http://github.com/spicycode/rcov):
 
       gem install spicycode-rcov -s http://gems.github.com
-
 
 # Credits
 
