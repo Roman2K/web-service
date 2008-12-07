@@ -70,7 +70,7 @@ module WebService
   protected # for CRUDOperations
   
     def remote_collection
-      @remote_collection ||= self.class.instance_eval { remote_collection }.with_nesting(nesting)
+      @remote_collection ||= self.class.instance_eval { remote_collection }.with_nesting(nesting).extend(ImplicitId).set_related_resource(self)
     end
     
     def resource_class
@@ -99,6 +99,17 @@ module WebService
     module NestingAsImplicitAttributes
       def implicit_attributes
         nesting.inject({}) { |attributes, (res_name, id)| attributes.update("#{res_name}_id" => id) }
+      end
+    end
+    
+    module ImplicitId
+      def set_related_resource(resource)
+        @related_resource = resource
+        self
+      end
+      
+      def implicit_id
+        @related_resource.id if @related_resource.respond_to?(:id)
       end
     end
   end

@@ -13,6 +13,7 @@ module WebService
     
     def request(method, *args)
       id, action, body = recognize(ARGUMENT_LAYOUT_FOR_REQUEST, *args)
+      id ||= implicit_id if respond_to?(:implicit_id)
       
       url = build_url_for(id, action)
       request = instantiate_request_for(method, url)
