@@ -51,19 +51,19 @@ Use `post.comments` like you would `Comment`, only scoped to `post`.
 
 ## Formats
 
-  * Request bodies are sent **JSON**-encoded.
-  * Response bodies can be either **JSON**- or **XML**-encoded.
+* Request bodies are sent **JSON**-encoded.
+* Response bodies can be either **JSON**- or **XML**-encoded.
 
 ## Status
 
-  * Some methods need to be **cached** in memory, like:
-    * association collections, so that:
-      
+* Some methods need to be **cached** in memory, like:
+  * association collections, so that:
+
             post.comments.object_id == post.comments.object_id
-      
-    * fetched resources, so that:
-      
+
+  * fetched resources, so that:
+
             comments = post.comments
             comments.all.object_id == comments.all.object_id
-      
-  * There are **tests** left to be written. Run `rake coverage` to see what is still to be tested.
+
+* There are **tests** left to be written. Run `rake coverage` to see what is still to be tested.
