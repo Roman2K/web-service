@@ -7,15 +7,17 @@ REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classe
     require 'web_service'
     
     class BasicResource < WebService::Resource
+      # Mandatory:
       self.site = WebService::Site.new("http://login:password@host:port")
+      
+      # Optional (and possibly in subclasses):
+      self.site = WebService::Site.new("https://secure.site")
+      self.credentials = ["custom", "credentials"]
+      self.element_name = "custom_element_name"
+      self.singleton = true   # /foo instead of /foos/1
     end
     
     class Post < BasicResource
-      # self.site = WebService::Site.new("http://custom.site")
-      # self.credentials = ["custom", "credentials"]
-      # self.element_name = "custom_element_name"
-      # self.singleton = true
-      
       has_many :comments
     end
     
