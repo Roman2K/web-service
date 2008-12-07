@@ -58,10 +58,14 @@ Gem coming soon.
     Post[99]        # => nil
     Post.find(99)   # raises WebService::ResourceNotFound
     
+    Post.all        # => [Post[1], ..., Post[42]]
+    Post.first      # => Post[1]
+    Post.last       # => Post[42]
+    
     comment = Comment.new(:post_id => 1)
-    comment.post  # => Post[1]
+    comment.post    # => Post[1]
     # => GET /posts/1
-    comment.post  # => Post[1]
+    comment.post    # => Post[1]
     # => (cache hit)
 
 ### Associations
