@@ -4,6 +4,8 @@ REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classe
 
 ## Usage example
 
+    require 'web_service'
+    
     class Post < WebService::Resource
       has_many :comments
     end
