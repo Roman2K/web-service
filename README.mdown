@@ -57,6 +57,7 @@ Use `post.comments` like you would `Comment`, only scoped to `post`.
 ## Status
 
 * Some methods need to be **cached** in memory, like:
+
   * association collections, so that:
 
             post.comments.object_id == post.comments.object_id
