@@ -25,9 +25,7 @@ class WebService::ResourceTest < Test::Unit::TestCase
   end
   
   def test_belongs_to
-    #########
-    #  Save
-    #########
+    # Saving
     bar = Bar.new("foo" => Foo.new("id" => 1), "a" => "b")
     
     expect_request bar,
@@ -37,9 +35,7 @@ class WebService::ResourceTest < Test::Unit::TestCase
     bar.save
     assert_equal({"c" => "d"}, bar.attributes)
     
-    ##########
-    #  Fetch
-    ##########
+    # Fetching
     expect_request Bar, :get, "/bars", :return => {:status => "200", :body => []}
     Bar.all
   end
@@ -47,15 +43,11 @@ class WebService::ResourceTest < Test::Unit::TestCase
   def test_has_many
     foo = Foo.new("id" => 1)
     
-    ##################
-    #  Instantiation
-    ##################
+    # Instantiation
     bar = foo.bars.build("a" => "b")
     assert_equal({"foo_id" => 1, "a" => "b"}, bar.attributes)
     
-    #############
-    #  Fetching
-    #############
+    # Fetching
     expect_request foo.bars,
       :get, "/foos/1/bars",
       :return => {:status => "200", :body => []}
