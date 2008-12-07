@@ -54,7 +54,7 @@ module WebService
     end
     
     def save
-      self.attributes = (saved? ? update(id, attributes) : create(attributes)).attributes
+      self.attributes = (saved? ? update((id unless self.class.singleton), attributes) : create(attributes)).attributes
       self
     end
     

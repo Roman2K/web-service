@@ -93,5 +93,24 @@ class WebService::ResourceTest < Test::Unit::TestCase
     
     foo.save
     assert_equal({"c" => "d"}, foo.attributes)
+    
+    ##############
+    #  Singleton
+    ##############
+    type_foo = Class.new(Foo) { self.singleton = true }
+    
+    # Creation
+    foo = type_foo.new
+    expect_request foo,
+      :post, "/foo", :body => {"foo" => {}},
+      :return => {:status => "201", :body => {"foo" => {}}}
+    foo.save
+    
+    # Update
+    foo = type_foo.new("id" => 1)
+    expect_request foo,
+      :put, "/foo", :body => {"foo" => {"id" => 1}},
+      :return => {:status => "200", :body => {"foo" => {}}}
+    foo.save
   end
 end
