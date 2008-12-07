@@ -104,83 +104,80 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
   ##########################
 
   Object.class_eval %q{
-    class Associate < Struct.new(:id)
-      def self.find
-      end
-      def initialize(attrs)
-        self.id = attrs['id']
-      end
-    end
-    class NotAssociate
+    class NotResource
     end
   }
   
   def test_association_querying
-    res = Resource.new
+    bar = Bar.new
     
-    assert !res.respond_to?(:associate?)
+    assert !bar.respond_to?(:foo?)
     
-    res.associate = Associate.new('id' => 1)
-    assert res.associate?
-    assert res.associate_id?
+    bar.foo = Foo.new('id' => 1)
+    assert bar.foo?
+    assert bar.foo_id?
     
-    res.associate = nil
-    assert !res.associate?
-    assert !res.associate_id?
+    bar.foo = nil
+    assert !bar.foo?
+    assert !bar.foo_id?
   end
   
   def test_association_writers
-    res = Resource.new
+    bar = Resource.new
     
-    res.associate = {"id" => 1}
-    assert_equal Associate.new('id' => 1), res.associate
-    assert_equal 1, res.associate_id
+    bar.foo = {"id" => 1}
+    assert_equal Foo.new('id' => 1), bar.foo
+    assert_equal 1, bar.foo_id
     
-    res.associate = {"id" => 1}
-    res.associate = nil
-    assert_equal nil, res.associate
-    assert_equal nil, res.associate_id
+    bar.foo = {"id" => 1}
+    bar.foo = nil
+    assert_equal nil, bar.foo
+    assert_equal nil, bar.foo_id
     
-    res.associate = {"id" => 1}
-    res.associate_id = nil
-    assert_equal nil, res.associate
-    assert_equal nil, res.associate_id
+    bar.foo = {"id" => 1}
+    bar.foo_id = nil
+    assert_equal nil, bar.foo
+    assert_equal nil, bar.foo_id
     
-    res.associate = {"id" => 1}
-    res.associate_id = 1
-    Associate.stubs(:find).with(1).returns("reset").once
-    assert_equal "reset", res.associate
-    assert_equal 1, res.associate_id
+    bar.foo = {"id" => 1}
+    bar.foo_id = 1
+    Foo.stubs(:find).with(1).returns("reset").once
+    assert_equal "reset", bar.foo
+    assert_equal 1, bar.foo_id
     
-    associate = Associate.new('id' => 2)
-    res.associate = associate
-    assert_equal associate.object_id, res.associate.object_id
-    assert_equal 2, res.associate_id
+    foo = Foo.new('id' => 2)
+    bar.foo = foo
+    assert_equal foo.object_id, bar.foo.object_id
+    assert_equal 2, bar.foo_id
     
-    res.associate = nil
+    bar.foo = nil
     assert_raise WebService::ResourceNotSaved do
-      res.associate = Associate.new('id' => nil)
+      bar.foo = Foo.new('id' => nil)
     end
-    assert_equal nil, res.associate
+    assert_equal nil, bar.foo
     
-    res.associate = Associate.new('id' => 2)
-    res.associate_id = 3
-    Associate.expects(:find).with(3).returns("fetched").once
-    assert_equal "fetched", res.associate
-    assert_equal "fetched", res.associate
+    bar.foo = Foo.new('id' => 2)
+    bar.foo_id = 3
+    Foo.expects(:find).with(3).returns("fetched").once
+    assert_equal "fetched", bar.foo
+    assert_equal "fetched", bar.foo
     
-    res.not_associate = {"id" => 4}
-    assert_equal({"id" => 4}, res.not_associate)
+    bar.not_resource = {"id" => 4}
+    assert_equal({"id" => 4}, bar.not_resource)
     
-    res.noclass_id = 5
+    bar.noclass_id = 5
     assert_raise NameError, "uninitialized constant Noclass" do
-      res.noclass
+      bar.noclass
     end
     
-    res.not_associate_id = 6
-    expected_message = "class NotAssociate found for association `not_associate' is not a resource class"
+    bar.not_resource_id = 6
+    expected_message = "class NotResource found for association `not_resource' is not a resource class"
     assert_raise WebService::NotResourceClass, expected_message do
-      res.not_associate
+      bar.not_resource
     end
+    
+    not_resource = NotResource.new
+    bar.attributes = {:not_resource => not_resource}
+    assert_equal not_resource, bar.not_resource
   end
 end

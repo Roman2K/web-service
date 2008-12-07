@@ -35,9 +35,9 @@ module WebService
       send("#{$`}=", nil) if attr_name =~ /_id$/
       if value.nil?
         attribute_registry["#{attr_name}_id"] = association_registry[attr_name] = nil
-      elsif resource_class?(value.class) && value.respond_to?(:id)
-        id = value.id or raise ResourceNotSaved, "resource must have an ID in order to be associated to another resource"
-        attribute_registry["#{attr_name}_id"], association_registry[attr_name] = id, value
+      elsif resource_class?(value.class)
+        value.saved? or raise ResourceNotSaved, "resource must have an ID in order to be associated to another resource"
+        attribute_registry["#{attr_name}_id"], association_registry[attr_name] = value.id, value
       elsif Hash === value and id = value["id"] and klass = resource_class_for?(attr_name)
         attribute_registry["#{attr_name}_id"], association_registry[attr_name] = id, klass.new(value)
       else
@@ -102,7 +102,7 @@ module WebService
     end
     
     def resource_class?(klass)
-      Class === klass && klass.respond_to?(:find)
+      Class === klass && klass.respond_to?(:find) && klass.public_method_defined?(:saved?)
     end
   end
 end
