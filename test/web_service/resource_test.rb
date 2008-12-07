@@ -56,8 +56,8 @@ class WebService::ResourceTest < Test::Unit::TestCase
     #############
     #  Fetching
     #############
-    expect_request Bar,
-      :get, "/foos/1/bars", :once_nested => true,
+    expect_request foo.bars,
+      :get, "/foos/1/bars",
       :return => {:status => "200", :body => []}
     foo.bars.all
   end

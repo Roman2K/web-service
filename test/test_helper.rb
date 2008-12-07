@@ -20,32 +20,24 @@ class Bar < WebService::Resource
 end
 
 Test::Unit::TestCase.class_eval do
-  def expect_request(resource, method, path, details)
+  def expect_request(resource_or_collection, method, path, details)
     connection  = stub
     response    = Net::HTTPResponse::CODE_TO_OBJ[details[:return][:status].to_s].new(*[stub_everything] * 3)
     body        = nil
     
-    patch_collection = lambda do |collection|
-      collection.
-        stubs(:open_http_connection_to).
-        yields(connection).
-        returns(response)
-    end
-    
-    collection = resource.ieval { remote_collection }
-    if details[:once_nested]
-      collection.metaclass.class_eval do
-        old_with_nesting = instance_method(:with_nesting)
-        define_method(:with_nesting) do |*args|
-          returning(old_with_nesting.bind(self).call(*args)) do |nested_collection|
-            patch_collection.call(nested_collection)
-          end
-        end
+    collection =
+      case resource_or_collection
+      when WebService::RemoteCollection
+        resource_or_collection
+      else
+        resource_or_collection.ieval { remote_collection }
       end
-    else
-      patch_collection.call(collection)
-    end
-
+    
+    collection.
+      stubs(:open_http_connection_to).
+      yields(connection).
+      returns(response)
+    
     connection.expects(:request).with { |req, body|
       assert_equal(method.to_s.upcase, req.method)
       assert_equal(path, req.path)

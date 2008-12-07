@@ -119,15 +119,10 @@ All of resource classes, resource instances and association collections respond 
 
 ## Status
 
-* Some methods need to be **cached** in memory, such as:
-  * association collections, so that:
+* Fetched resources should be cached in memory, so that the following returns true:
 
-        post.comments.object_id == post.comments.object_id
-
-  * fetched resources, so that:
-
-        comments = post.comments
-        comments.all.object_id == comments.all.object_id
+      comments = post.comments
+      comments.all.object_id == comments.all.object_id
 
 * There are **tests** left to be written. Run `rake coverage` to find out what still has to be tested. Note that for RCov to work with Ruby 1.8.7, you might need to install the latest `rcov` gem from [GitHub](http://github.com/spicycode/rcov):
 

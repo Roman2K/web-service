@@ -88,10 +88,8 @@ module WebService
   protected
     
     def association_collection_from_name(name)
-      name.to_s.
-        singularize.camelize.constantize.
-        instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
-        extend CRUDOperations, NestingAsImplicitAttributes
+      @association_collections ||= {}
+      @association_collections[name.to_s] ||= build_association_collection_from_name(name)
     end
     
   private
@@ -102,6 +100,13 @@ module WebService
     
     def nesting_up_to_self
       nesting + [[self.class.element_name, id]]
+    end
+    
+    def build_association_collection_from_name(name)
+      name.to_s.
+        singularize.camelize.constantize.
+        instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
+        extend CRUDOperations, NestingAsImplicitAttributes
     end
     
     module NestingAsImplicitAttributes
