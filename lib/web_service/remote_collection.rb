@@ -13,7 +13,6 @@ module WebService
     
     def request(method, *args)
       id, action, body = recognize(ARGUMENT_LAYOUT_FOR_REQUEST, *args)
-      id ||= implicit_id if respond_to?(:implicit_id)
       
       url = build_url_for(id, action)
       request = instantiate_request_for(method, url)
@@ -45,6 +44,12 @@ module WebService
     
     # Handle the body differently depending on the request method.
     def build_url_for(id, action)
+      if resource_class.singleton
+        raise ArgumentError, "singleton resources do not require an ID parameter" if id
+      else
+        id ||= implicit_id if respond_to?(:implicit_id)
+      end
+      
       url = ensure_url_copy(resource_class.site)
       segments = [url.path]
       nesting.each do |res_name, id_for_association|
@@ -53,9 +58,7 @@ module WebService
         segments << id_for_association
       end
       segments << (resource_class.singleton ? resource_class.element_name : resource_class.element_name.pluralize)
-      if resource_class.singleton && id
-        raise ArgumentError, "singleton resources do not require an ID parameter"
-      end
+
       segments << id << action
       url.path = segments.compact.join('/').squeeze('/')
       return url
