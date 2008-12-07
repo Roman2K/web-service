@@ -1,0 +1,69 @@
+# WebService
+
+REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classes/ActiveResource/Base.html).
+
+## Usage example
+
+    class Post < WebService::Resource
+      has_many :comments
+    end
+    
+    class Comment < WebService::Resource
+      belongs_to :post
+    end
+
+### CRUD
+
+    begin
+      post = Post.create(:title => "First post")
+      # => POST /posts
+    rescue WebService::ResourceInvalid
+      puts $!.response.data['errors']['error'] * "\n"
+      post.body = "Like the title says."
+      post.save
+      # => PUT /posts
+    end
+
+### Fetching
+
+    post.id         # => 1
+    Post[1] == post # => true
+    Post[99]        # => nil
+    Post.find(99)   # raises WebService::ResourceNotFound
+
+### Associations
+
+Use `post.comments` like you would `Comment`, only scoped to `post`.
+
+    puts "First post has %d comments." % post.comments.all.size
+    # => GET /posts/1/comments
+    
+    post.comments.create(:body => "First comment.")
+    # => POST /posts/1/comments
+
+### Arbitrary actions
+
+    post.put(:hide)
+    # => PUT /posts/1/hide
+    
+    Post.delete(:least_read)
+    # => DELETE /posts/least_read
+
+## Formats
+
+  * Request bodies are sent **JSON**-encoded.
+  * Response bodies can be either **JSON**- or **XML**-encoded.
+
+## Status
+
+  * Some methods need to be **cached** in memory, like:
+    * association collections, so that:
+      
+            post.comments.object_id == post.comments.object_id
+      
+    * fetched resources, so that:
+      
+            comments = post.comments
+            comments.all.object_id == comments.all.object_id
+      
+  * There are **tests** left to be written. Run `rake coverage` to see what is still to be tested.
