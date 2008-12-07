@@ -2,6 +2,10 @@
 
 REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classes/ActiveResource/Base.html).
 
+## Installation
+
+Gem coming soon.
+
 ## Usage example
 
     require 'web_service'
