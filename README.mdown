@@ -41,8 +41,9 @@ RubyGem coming soon.
 
 ### CRUD
 
+    post = Post.new(:title => "First post")
     begin
-      post = Post.create(:title => "First post")
+      post.save
       # => POST /posts
     rescue WebService::ResourceInvalid
       post.body = "Like the title says."
