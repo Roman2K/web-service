@@ -52,6 +52,18 @@ class WebService::ResourceTest < Test::Unit::TestCase
       :get, "/foos/1/bars",
       :return => {:status => "200", :body => []}
     foo.bars.all
+    
+    # Creation
+    expect_request foo.bars,
+      :post, "/foos/1/bars", :body => {"bar" => {"foo_id" => 1, "a" => "b"}},
+      :return => {:status => "201", :body => {"bar" => {"c" => "d"}}}
+    foo.bars.create("a" => "b")
+    
+    # Arbitrary actions
+    expect_request foo.bars,
+      :delete, "/foos/1/bars/99",
+      :return => {:status => "200"}
+    foo.bars.delete(99)
   end
   
 # public

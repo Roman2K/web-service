@@ -38,6 +38,8 @@ module WebService
       
     protected
     
+      delegate :request, :to => :remote_collection
+      
       def remote_collection
         @remote_collection ||= RemoteCollection.new(self)
       end
@@ -74,6 +76,8 @@ module WebService
     
   protected # for CRUDOperations
   
+    delegate :request, :to => :remote_collection
+    
     def remote_collection
       @remote_collection ||=
         self.class.instance_eval { remote_collection }.
@@ -106,7 +110,7 @@ module WebService
       name.to_s.
         singularize.camelize.constantize.
         instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
-        extend CRUDOperations, NestingAsImplicitAttributes
+        extend NamedRequestMethods, CRUDOperations, NestingAsImplicitAttributes
     end
     
     module NestingAsImplicitAttributes
