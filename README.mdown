@@ -8,6 +8,12 @@ RubyGem coming soon.
 
 ## Usage example
 
+Let's say you have a Rails app exposing a RESTful API for articles and their comments:
+
+    map.resources :articles, :has_many => :comments
+
+When building the corresponding client for this API to consume these resources, the code could look like:
+
     require 'web_service'
     
     class BasicResource < WebService::Resource
