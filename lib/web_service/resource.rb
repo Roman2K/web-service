@@ -122,7 +122,7 @@ module WebService
       end
       
       def implicit_id
-        @related_resource.id if @related_resource.respond_to?(:id)
+        @related_resource.id if @related_resource.saved?
       end
     end
   end
