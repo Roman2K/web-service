@@ -1,6 +1,12 @@
 module WebService
   class RemoteCollection
     ARGUMENT_LAYOUT_FOR_REQUEST = [[Integer, /./], [Symbol, /^\//], Hash]
+    SERVER_EXCEPTIONS = [ Net::HTTPBadResponse,
+                          Net::HTTPHeaderSyntaxError,
+                          Net::ProtocolError,
+                          Errno::ECONNRESET,
+                          Errno::EINVAL,
+                          EOFError ]
     
     attr_reader :resource_class
     attr_reader :nesting
@@ -96,7 +102,7 @@ module WebService
       yield
     rescue Timeout::Error
       raise TimeoutError.new($!.message)
-    rescue SystemCallError, Net::ProtocolError
+    rescue *SERVER_EXCEPTIONS
       raise ConnectionError.new(nil, $!.message)
     end
     
