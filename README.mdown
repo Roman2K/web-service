@@ -21,78 +21,78 @@ RubyGem coming soon.
       self.singleton = true   # /foo instead of /foos/1
     end
     
-    class Post < BasicResource
+    class Article < BasicResource
       has_many :comments
     end
     
     class Comment < BasicResource
-      belongs_to :post
+      belongs_to :article
     end
 
 ### Attributes
 
-    post = Post.new(:title => "First post")
-    post.title    # => "First post"
-    post.title?   # => true
-    post.title = " "
-    post.title?   # false
-    post.body     # raises NoMethodError
-    post.body?    # raises NoMethodError
+    article = Article.new(:title => "First article")
+    article.title    # => "First article"
+    article.title?   # => true
+    article.title = " "
+    article.title?   # false
+    article.body     # raises NoMethodError
+    article.body?    # raises NoMethodError
 
 ### CRUD
 
-    post = Post.new(:title => "First post")
+    article = Article.new(:title => "First article")
     begin
-      post.save
-      # => POST /posts
+      article.save
+      # => POST /articles
     rescue WebService::ResourceInvalid
-      post.body = "Like the title says."
-      post.save
-      # => POST /posts
+      article.body = "Like the title says."
+      article.save
+      # => POST /articles
     end
     
-    post.body += " Updated."
-    post.save
-    # => PUT /posts/1
+    article.body += " Updated."
+    article.save
+    # => PUT /articles/1
     
-    post.destroy
-    # => DELETE /posts/1
+    article.destroy
+    # => DELETE /articles/1
 
 ### Fetching
 
-    post.id         # => 1
-    Post[1] == post # => true
-    Post[99]        # => nil
-    Post.find(99)   # raises WebService::ResourceNotFound
+    article.id            # => 1
+    Article[1] == article # => true
+    Article[99]           # => nil
+    Article.find(99)      # raises WebService::ResourceNotFound
     
-    Post.all        # => [Post[1], ..., Post[42]]
-    Post.first      # => Post[1]
-    Post.last       # => Post[42]
+    Article.all           # => [Article[1], ..., Article[42]]
+    Article.first         # => Article[1]
+    Article.last          # => Article[42]
     
-    comment = Comment.new(:post_id => 1)
-    comment.post    # => Post[1]
-    # => GET /posts/1
-    comment.post    # => Post[1]
+    comment = Comment.new(:article_id => 1)
+    comment.article       # => Article[1]
+    # => GET /articles/1
+    comment.article       # => Article[1]
     # => (cache hit)
 
-### Associations
+### Nested resources (associations)
 
-Use `post.comments` like you would `Comment`, only scoped to `post`.
+Use `article.comments` like you would `Comment`, only scoped to `article`.
 
-    post.comments.all
-    # => GET /posts/1/comments
+    article.comments.all
+    # => GET /articles/1/comments
 
-Associating a comment with a post:
+Associating a comment with a article:
 
-    post.comments.create(:body => "First comment.")
-    # => POST /posts/1/comments
+    article.comments.create(:body => "First comment.")
+    # => POST /articles/1/comments
 
 The same in a more formal way:
 
     comment = Comment.new(:body => "First comment.")
-    comment.post = post
-    comment.post == post  # => true
-    comment.post_id       # => 1
+    comment.article = article
+    comment.article == article  # => true
+    comment.article_id       # => 1
     comment.save
 
 ### Arbitrary actions
@@ -101,17 +101,17 @@ All of resource classes, resource instances and association collections respond 
 
 **Note:** these methods do not return resource instances, but rather plain unserialized objects, as return by the server:
 
-    Post.delete(:unpopular)         # => [{'id' => 5, ...}, ...]
-    # => DELETE /posts/unpopular
+    Article.delete(:unpopular)         # => [{'id' => 5, ...}, ...]
+    # => DELETE /articles/unpopular
 
-    Post.get(:popular, :page => 2)  # => [{'id' => 1, ...}, ...]
-    # => GET /posts/popular?page=2
+    Article.get(:popular, :page => 2)  # => [{'id' => 1, ...}, ...]
+    # => GET /articles/popular?page=2
     
-    post.put(:publish, :at => 1.hour.from_now)
-    # => PUT /posts/1/publish {:at => 1.hour.from_now}
+    article.put(:publish, :at => 1.hour.from_now)
+    # => PUT /articles/1/publish {:at => 1.hour.from_now}
     
-    post.comments.put(:spam)
-    # => PUT /posts/1/comments/spam
+    article.comments.put(:spam)
+    # => PUT /articles/1/comments/spam
 
 ## Formats
 
@@ -122,7 +122,7 @@ All of resource classes, resource instances and association collections respond 
 
 * Fetched resources should be cached in memory, so that the following returns true:
 
-      comments = post.comments
+      comments = article.comments
       comments.all.object_id == comments.all.object_id
 
 * There are **tests** left to be written. Run `rake coverage` to find out what still has to be tested. Note that for RCov to work with Ruby 1.8.7, you might need to install the latest `rcov` gem from [GitHub](http://github.com/spicycode/rcov):
