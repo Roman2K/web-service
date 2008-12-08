@@ -1,7 +1,7 @@
 module WebService
   module AttributeAccessors
     def initialize(attributes={})
-      attributes.each { |name, value| send("#{name}=", value) }
+      self.attributes = attributes
     end
 
     def attributes
