@@ -105,7 +105,7 @@ The same in a more formal way:
 
 All of resource classes, resource instances and association collections respond to all four HTTP verbs (`GET`, `POST`, `PUT` and `DELETE`) to issue requests to arbitrary actions.
 
-**Note:** these methods do not return resource instances, but rather plain unserialized objects, as return by the server:
+**Note:** these methods do not return resource instances, but rather plain unserialized objects, as returned by the server:
 
     Article.delete(:unpopular)         # => [{'id' => 5, ...}, ...]
     # => DELETE /articles/unpopular
@@ -121,8 +121,8 @@ All of resource classes, resource instances and association collections respond 
 
 ## Formats
 
-* Request bodies are sent **JSON**-encoded.
-* Response bodies can be either **JSON**- or **XML**-encoded.
+* Requests are sent **JSON**-encoded.
+* Responses can be returned either **JSON**- or **XML**-encoded.
 
 ## Status
 
