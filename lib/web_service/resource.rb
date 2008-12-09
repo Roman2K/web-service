@@ -51,6 +51,20 @@ module WebService
     
     alias to_hash :attributes
     
+    def to_s
+      [self.class, saved? ? "[#{id}]" : "(new)"].join
+    end
+    
+    def inspect
+      displayable_attributes_pairs =
+        attributes.map { |name, value|
+          value = value[0, 22] + '...' if String === value && value.length > 25
+          "#{name}=#{value.inspect}" unless name == 'id'
+        }.compact.sort
+      
+      "#<#{to_s}#{" " + displayable_attributes_pairs * " " if displayable_attributes_pairs.any?}>"
+    end
+    
     def ==(other)
       self.class === other && self.attributes == other.attributes
     end

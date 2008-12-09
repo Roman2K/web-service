@@ -73,6 +73,17 @@ class WebService::ResourceTest < Test::Unit::TestCase
     assert_equal res.attributes, res.to_hash
   end
   
+  def test_to_s
+    assert_equal "Foo(new)",  Foo.new.to_s
+    assert_equal "Foo[1]",    Foo.new('id' => 1).to_s
+  end
+  
+  def test_inspect
+    assert_equal "#<Foo(new)>", Foo.new.inspect
+    assert_equal "#<Foo[1]>", Foo.new('id' => 1).inspect
+    assert_equal "#<Foo[1] bar=2.0 baz=\"abcdefghijklmnopqrstuv...\">", Foo.new('id' => 1, 'bar' => 2.0, 'baz' => Array('a'..'z').join).inspect
+  end
+  
   def test_save
     #############
     #  Creation
