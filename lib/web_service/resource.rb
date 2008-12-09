@@ -56,13 +56,12 @@ module WebService
     end
     
     def inspect
+      type_with_id = [self.class, saved? ? "[#{id}]" : "(new)"].join
       displayable_attributes_pairs =
         attributes.map { |name, value|
           value = value[0, 22] + '...' if String === value && value.length > 25
           "#{name}=#{value.inspect}" unless name == 'id'
         }.compact.sort
-      
-      type_with_id = [self.class, saved? ? "[#{id}]" : "(new)"].join
       "#<#{type_with_id}#{" " + displayable_attributes_pairs * " " if displayable_attributes_pairs.any?}>"
     end
     
