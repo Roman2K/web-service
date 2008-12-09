@@ -1,12 +1,16 @@
 module WebService
   class RemoteCollection
-    ARGUMENT_LAYOUT_FOR_REQUEST = [[Integer, /./], [Symbol, /^\//], Hash]
+    ARGUMENT_LAYOUT_FOR_REQUEST = [ [Integer, /./],   # ID
+                                    [Symbol, /^\//],  # Action
+                                     Hash ].freeze    # Body
+    
     SERVER_EXCEPTIONS = [ Net::HTTPBadResponse,
                           Net::HTTPHeaderSyntaxError,
                           Net::ProtocolError,
                           Errno::ECONNRESET,
                           Errno::EINVAL,
-                          EOFError ]
+                          SocketError,
+                          IOError ].freeze
     
     attr_reader :resource_class
     attr_reader :nesting
