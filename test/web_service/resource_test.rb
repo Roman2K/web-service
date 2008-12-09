@@ -80,8 +80,13 @@ class WebService::ResourceTest < Test::Unit::TestCase
   
   def test_inspect
     assert_equal "#<Foo(new)>", Foo.new.inspect
-    assert_equal "#<Foo[1]>", Foo.new('id' => 1).inspect
+    assert_equal "#<Foo[1]>",   Foo.new('id' => 1).inspect
     assert_equal "#<Foo[1] bar=2.0 baz=\"abcdefghijklmnopqrstuv...\">", Foo.new('id' => 1, 'bar' => 2.0, 'baz' => Array('a'..'z').join).inspect
+    
+    # with custom to_s
+    foo = Foo.new
+    def foo.to_s; "custom" end
+    assert_equal "#<Foo(new)>", foo.inspect
   end
   
   def test_save

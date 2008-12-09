@@ -62,7 +62,8 @@ module WebService
           "#{name}=#{value.inspect}" unless name == 'id'
         }.compact.sort
       
-      "#<#{to_s}#{" " + displayable_attributes_pairs * " " if displayable_attributes_pairs.any?}>"
+      type_with_id = [self.class, saved? ? "[#{id}]" : "(new)"].join
+      "#<#{type_with_id}#{" " + displayable_attributes_pairs * " " if displayable_attributes_pairs.any?}>"
     end
     
     def ==(other)
