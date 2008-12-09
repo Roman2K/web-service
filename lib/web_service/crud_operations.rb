@@ -6,8 +6,8 @@ module WebService
     delegate :each, :to => :all
     
     def all
-      expect(request(:get), Net::HTTPOK) do |result|
-        instantiate_several_from_http_response_data(result)
+      expect(request(:get), Net::HTTPOK) do |data|
+        instantiate_several_from_http_response_data(data)
       end
     end
     
@@ -20,8 +20,8 @@ module WebService
     end
     
     def find(id)
-      expect(request(:get, id), Net::HTTPOK) do |result|
-        instantiate_single_from_http_response_data(result)
+      expect(request(:get, id), Net::HTTPOK) do |data|
+        instantiate_single_from_http_response_data(data)
       end
     end
     
@@ -37,14 +37,14 @@ module WebService
     end
     
     def create(attributes={})
-      expect(request(:post, body_for_create_or_update(attributes)), Net::HTTPCreated, Net::HTTPAccepted) do |result|
-        instantiate_single_from_http_response_data(result)
+      expect(request(:post, body_for_create_or_update(attributes)), Net::HTTPCreated, Net::HTTPAccepted) do |data|
+        instantiate_single_from_http_response_data(data)
       end
     end
     
     def update(id, attributes={})
-      expect(request(:put, id, body_for_create_or_update(attributes)), Net::HTTPOK, Net::HTTPAccepted) do |result|
-        instantiate_single_from_http_response_data(result)
+      expect(request(:put, id, body_for_create_or_update(attributes)), Net::HTTPOK, Net::HTTPAccepted) do |data|
+        instantiate_single_from_http_response_data(data)
       end
     end
     

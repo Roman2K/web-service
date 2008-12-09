@@ -56,12 +56,7 @@ module WebService
     end
     
     def save
-      self.attributes =
-        if saved?
-          update((id unless self.class.singleton), attributes)
-        else
-          create(attributes)
-        end.attributes
+      self.attributes = if saved? then update((id unless self.class.singleton), attributes) else create(attributes) end.attributes
       return self
     end
     
@@ -80,8 +75,7 @@ module WebService
     
     def remote_collection
       @remote_collection ||=
-        self.class.instance_eval { remote_collection }.
-        with_nesting(nesting).
+        self.class.instance_eval { remote_collection }.with_nesting(nesting).
         extend(ImplicitID).set_related_resource(self)
     end
     

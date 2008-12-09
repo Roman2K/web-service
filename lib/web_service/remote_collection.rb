@@ -65,7 +65,6 @@ module WebService
         segments << id_for_association
       end
       segments << (resource_class.singleton ? resource_class.element_name : resource_class.element_name.pluralize)
-
       segments << id << action
       url.path = segments.compact.join('/').squeeze('/')
       return url
@@ -108,11 +107,6 @@ module WebService
     
   private # utilities
     
-    # Usage:
-    #
-    #   recognize [Hash, Symbol, [/^\d+$/, Integer]], 3, {:option => true}
-    #   => {:option => true}, nil, 3
-    #
     def recognize(patterns, *objects)
       patterns.map do |pattern|
         if pos = objects.index { |object| case object; when *pattern; true; end }
