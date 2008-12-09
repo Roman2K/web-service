@@ -5,7 +5,7 @@ require 'ostruct'
 require 'uri'
 require 'net/https'
 
-class Object
+Object.class_eval do
   undef :id if method_defined?(:id)
 end
 
