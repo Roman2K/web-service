@@ -129,6 +129,10 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
     assert_equal Foo.new('id' => 1), bar.foo
     assert_equal 1, bar.foo_id
     
+    bar.foo = {"foo" => {"id" => 1}}
+    assert_equal Foo.new('id' => 1), bar.foo
+    assert_equal 1, bar.foo_id
+    
     bar.foo = {"id" => 1}
     bar.foo = nil
     assert_equal nil, bar.foo

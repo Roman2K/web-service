@@ -1,7 +1,7 @@
 module WebService
   class RemoteCollection
     ARGUMENT_LAYOUT_FOR_REQUEST = [ [Integer, /./],   # ID
-                                    [Symbol, /^\//],  # Action
+                                    [Symbol,  /^\//], # Action
                                      Hash ].freeze    # Body
     
     SERVER_EXCEPTIONS = [ Net::HTTPBadResponse,
