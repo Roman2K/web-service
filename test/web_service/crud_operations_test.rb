@@ -2,12 +2,32 @@ require "test_helper"
 
 class WebService::CrudOperationsTest < Test::Unit::TestCase
   def test_all
+    will_return = expect_request_for_foos_index_with_param_bar_equals_baz
+    foos = Foo.all(:bar => :baz)
+    assert_equal will_return, foos
+  end
+  
+  def test_first
+    will_return = expect_request_for_foos_index_with_param_bar_equals_baz
+    assert_equal will_return.first, Foo.first(:bar => :baz)
+  end
+  
+  def test_last
+    will_return = expect_request_for_foos_index_with_param_bar_equals_baz
+    assert_equal will_return.last, Foo.last(:bar => :baz)
+  end
+  
+  def test_find
     expect_request Foo,
-      :get, "/foos",
-      :return => {:status => "200", :body => [{"foo" => {"id" => 1}}, {"foo" => {"id" => 2}}]}
+      :get, "/foos/1?bar=baz",
+      :return => {:status => "200", :body => {"foo" => {"id" => 1}}}
+    assert_equal Foo.new('id' => 1), Foo.find(1, :bar => :baz)
     
-    foos = Foo.all
-    assert_equal [Foo.new("id" => 1), Foo.new("id" => 2)], foos
+    expect_request Foo,
+      :get, "/foos/1", :return => {:status => "404"}
+    assert_raise WebService::ResourceNotFound do
+      Foo.find(1)
+    end
   end
   
   def test_build
@@ -15,5 +35,14 @@ class WebService::CrudOperationsTest < Test::Unit::TestCase
     def type_foo.implicit_attributes; {:a => :b, :c => :d} end
     foo = type_foo.build("a" => :overridden, "e" => "f")
     assert_equal({"a" => :overridden, "c" => :d, "e" => "f"}, foo.attributes)
+  end
+  
+private
+
+  def expect_request_for_foos_index_with_param_bar_equals_baz
+    expect_request Foo,
+      :get, "/foos?bar=baz",
+      :return => {:status => "200", :body => [{"foo" => {"id" => 1}}, {"foo" => {"id" => 2}}]}
+    [Foo.new("id" => 1), Foo.new("id" => 2)]
   end
 end

@@ -5,22 +5,22 @@ module WebService
     
     delegate :each, :to => :all
     
-    def all
-      expect(request(:get), Net::HTTPOK) do |data|
+    def all(*args)
+      expect(request(:get, *args), Net::HTTPOK) do |data|
         instantiate_several_from_http_response_data(data)
       end
     end
     
-    def first
-      all.first
+    def first(*args)
+      all(*args).first
     end
     
-    def last
-      all.last
+    def last(*args)
+      all(*args).last
     end
     
-    def find(id)
-      expect(request(:get, id), Net::HTTPOK) do |data|
+    def find(id, *args)
+      expect(request(:get, id, *args), Net::HTTPOK) do |data|
         instantiate_single_from_http_response_data(data)
       end
     end
