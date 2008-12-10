@@ -34,7 +34,7 @@ module WebService
       response, elapsed = handle_connection_errors do
         benchmark do
           open_http_connection_to(url) do |conn|
-            conn.request(request, body).extend ResponseData
+            conn.request(request, body).extend ResponseDataUnserialization
           end
         end
       end
@@ -132,7 +132,7 @@ module WebService
       url.kind_of?(URI) ? url.dup : URI.parse(url)
     end
   
-    module ResponseData
+    module ResponseDataUnserialization
       def data
         @data ||=
           case content_type
