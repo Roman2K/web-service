@@ -116,7 +116,10 @@ All of resource classes, resource instances and association collections respond 
     article.put(:publish, :at => 1.hour.from_now)
     # => PUT /articles/1/publish {:at => 1.hour.from_now}
     
-    article.comments.put(:spam)
+    article.comments.put(:spam, 5)
+    # => PUT /articles/1/comments/5/spam
+    
+    article.comments.get("/spam")
     # => PUT /articles/1/comments/spam
 
 ## Formats

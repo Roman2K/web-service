@@ -1,6 +1,6 @@
 module WebService
   class RemoteCollection
-    ARGUMENT_LAYOUT_FOR_REQUEST = [ [Integer, /./],   # ID
+    ARGUMENT_LAYOUT_FOR_REQUEST = [ [Integer, /^[^\/]/],   # ID
                                     [Symbol,  /^\//], # Action
                                      Hash ].freeze    # Body
     

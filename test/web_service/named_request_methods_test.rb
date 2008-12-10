@@ -24,7 +24,11 @@ class WebService::NamedRequestMethodsTest < Test::Unit::TestCase
     expect_request foo,
       :put, "/foos/1/bar",
       :return => {:status => "200", :body => "bar"}
-    
     assert_equal "bar", foo.put(:bar)
+    
+    expect_request foo,
+      :put, "/foos/1/bar",
+      :return => {:status => "200", :body => "bar"}
+    assert_equal "bar", foo.put("/bar")
   end
 end
