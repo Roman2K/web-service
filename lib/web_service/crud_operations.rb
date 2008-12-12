@@ -68,6 +68,8 @@ module WebService
     end
     
     def instantiate_single_from_http_response_data(data)
+      return nil if data.to_s.blank?
+      
       unless data.respond_to?(:key?) && data.respond_to?(:[])
         raise ArgumentError, "wrong data type for marshalled resource: #{data.class} (expected a Hash)"
       end

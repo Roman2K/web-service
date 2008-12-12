@@ -102,6 +102,14 @@ class WebService::ResourceTest < Test::Unit::TestCase
     foo.save
     assert_equal({"c" => "d"}, foo.attributes)
     
+    # Accepted
+    foo = Foo.new("a" => "b")
+    expect_request foo,
+      :post, "/foos", :body => {"foo" => {"a" => "b"}},
+      :return => {:status => '202', :body => " "}
+    foo.save
+    assert_equal({"a" => "b"}, foo.attributes)
+    
     ###########
     #  Update
     ###########

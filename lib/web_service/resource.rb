@@ -70,7 +70,8 @@ module WebService
     end
     
     def save
-      self.attributes = if saved? then update((id unless self.class.singleton), attributes) else create(attributes) end.attributes
+      resource = if saved? then update((id unless self.class.singleton), attributes) else create(attributes) end
+      self.attributes = resource.attributes if resource
       return self
     end
     
