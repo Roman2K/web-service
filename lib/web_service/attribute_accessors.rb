@@ -10,6 +10,11 @@ module WebService
 
     def attributes=(attributes)
       attribute_registry.clear
+      
+      # Assign the ID first, so that it can be used while assigning the rest of the attributes
+      if id_key = [:id, "id"].find { |key| attributes.key? key }
+        self.id = attributes.delete(id_key)
+      end
       attributes.each { |name, value| send("#{name}=", value) }
     end
 

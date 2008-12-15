@@ -6,9 +6,14 @@ module WebService
     delegate :each, :to => :all
     
     def all(*args)
+      return @collection if @collection
       expect(request(:get, *args), Net::HTTPOK) do |data|
         instantiate_several_from_http_response_data(data)
       end
+    end
+    
+    def collection=(collection)
+      @collection = collection.map { |res| instantiate_resource(res) }
     end
     
     def first(*args)
@@ -84,7 +89,8 @@ module WebService
     end
     
     def instantiate_resource(*args, &block)
-      (respond_to?(:new) ? self : resource_class).new(*args, &block)
+      klass = respond_to?(:new) ? self : resource_class
+      args.size == 1 && !block && klass === args.first ? args.first : klass.new(*args, &block)
     end
   end
 end

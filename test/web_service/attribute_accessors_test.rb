@@ -21,11 +21,26 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
   
   def test_attributes=
     res = Resource.new(:foo => :bar)
-    
     res.attributes = {:bar => :foo}
-    
     assert !res.respond_to?(:foo)
     assert_equal :foo, res.bar
+    
+    # ID is set first
+    res = Resource.new
+    class << res
+      def assigned()  @assigned ||= []  end
+      def id=(id)     assigned << :id   end
+      def foo=(foo)   assigned << :foo  end
+      def bar=(bar)   assigned << :bar  end
+    end
+    # a) Symbol
+    res.assigned.clear
+    res.attributes = {:bar => :foo, :id => 1, :foo => :bar}
+    assert_equal [:id, :foo, :bar], res.assigned
+    # b) String
+    res.assigned.clear
+    res.attributes = {:bar => :foo, "id" => 1, :foo => :bar}
+    assert_equal [:id, :foo, :bar], res.assigned
   end
   
   def test_methods

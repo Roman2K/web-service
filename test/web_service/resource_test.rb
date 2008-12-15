@@ -66,6 +66,13 @@ class WebService::ResourceTest < Test::Unit::TestCase
     foo.bars.delete(99)
   end
   
+  def test_has_many=
+    foo = Foo.new("id" => 1)
+    foo.bars = [{:id => 1}, Bar.new(:id => 2)]
+    expected = [Bar.new(:id => 1), Bar.new(:id => 2)]
+    assert_equal expected, foo.bars.to_a
+  end
+  
 # public
   
   def test_to_hash

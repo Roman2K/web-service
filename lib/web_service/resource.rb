@@ -32,6 +32,10 @@ module WebService
             def #{res_name}
               association_collection_from_name %(#{res_name})
             end
+            
+            def #{res_name}=(collection)
+              #{res_name}.collection = collection
+            end
           }
         end
       end
