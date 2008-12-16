@@ -1,26 +1,10 @@
 require 'active_support'
-require 'array_index_block_form'
 require 'class_inheritable_attributes'
 require 'ostruct'
+require 'cgi'
 require 'uri'
 require 'net/https'
-
-Object.class_eval do
-  undef :id if method_defined?(:id)
-end
-
-def URI(object)
-  URI === object ? object : URI.parse(object.to_s)
-end
-
-URI.class_eval do
-  def obfuscate
-    returning(dup) do |obfuscated|
-      obfuscated.user &&= '***'
-      obfuscated.password &&= '***'
-    end
-  end
-end
+require 'web_service/core_ext'
 
 module WebService
   autoload :Site,                 'web_service/site'

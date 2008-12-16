@@ -25,6 +25,9 @@ class WebService::RemoteCollectionTest < Test::Unit::TestCase
     # Member
     assert_equal "/foos/1", build[1, nil].path
     
+    # Member (escaped)
+    assert_equal "/foos/example%2ecom", build["example.com", nil].path
+    
     # Member action
     assert_equal "/foos/1/action", build[1, :action].path
     

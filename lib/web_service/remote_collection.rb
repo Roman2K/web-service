@@ -69,7 +69,7 @@ module WebService
         segments << id_for_association
       end
       segments << (resource_class.singleton ? resource_class.element_name : resource_class.element_name.pluralize)
-      segments << id << action
+      segments << (CGI.escape(id.to_s) if id) << action
       url.path = segments.compact.join('/').squeeze('/')
       return url
     end
