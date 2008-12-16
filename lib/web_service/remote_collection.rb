@@ -29,7 +29,7 @@ module WebService
       request = instantiate_request_for(method, url)
       request.content_type = content_type if content_type
       WebService.logger.info do
-        "#{method.to_s.upcase} #{url}#{" (#{body.length} bytes)" if body}"
+        "#{method.to_s.upcase} #{url.obfuscate}#{" (#{body.length} bytes)" if body}"
       end
       response, elapsed = handle_connection_errors do
         benchmark do

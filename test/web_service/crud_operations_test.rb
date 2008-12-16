@@ -1,6 +1,6 @@
 require "test_helper"
 
-class WebService::CrudOperationsTest < Test::Unit::TestCase
+class WebService::CRUDOperationsTest < Test::Unit::TestCase
   def test_all
     will_return = expect_request_for_foos_index_with_param_bar_equals_baz
     foos = Foo.all(:bar => :baz)

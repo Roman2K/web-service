@@ -13,6 +13,15 @@ def URI(object)
   URI === object ? object : URI.parse(object.to_s)
 end
 
+URI.class_eval do
+  def obfuscate
+    returning(dup) do |obfuscated|
+      obfuscated.user &&= '***'
+      obfuscated.password &&= '***'
+    end
+  end
+end
+
 module WebService
   autoload :Site,                 'web_service/site'
   autoload :Resource,             'web_service/resource'
