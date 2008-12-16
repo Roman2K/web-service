@@ -7,6 +7,18 @@ class WebService::CrudOperationsTest < Test::Unit::TestCase
     assert_equal will_return, foos
   end
   
+  def test_cache
+    collection = Foo.new('id' => 1).bars
+    
+    collection.cache = [{'id' => 1}, Bar.new('id' => 2)]
+    assert_equal [Bar.new('id' => 1), Bar.new('id' => 2)], collection.all
+    
+    collection.flush_cache
+    expect_request collection,
+      :get, "/foos/1/bars", :return => {:status => "200", :body => []}
+    assert_equal [], collection.all
+  end
+  
   def test_first
     will_return = expect_request_for_foos_index_with_param_bar_equals_baz
     assert_equal will_return.first, Foo.first(:bar => :baz)

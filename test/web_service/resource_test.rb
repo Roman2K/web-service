@@ -68,9 +68,8 @@ class WebService::ResourceTest < Test::Unit::TestCase
   
   def test_has_many=
     foo = Foo.new("id" => 1)
-    foo.bars = [{:id => 1}, Bar.new(:id => 2)]
-    expected = [Bar.new(:id => 1), Bar.new(:id => 2)]
-    assert_equal expected, foo.bars.to_a
+    foo.bars.expects(:cache=).with("collection")
+    foo.bars = "collection"
   end
   
 # public

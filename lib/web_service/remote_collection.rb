@@ -93,7 +93,7 @@ module WebService
     
     def open_http_connection_to(url)
       http = Net::HTTP.new(url.host, url.port)
-      http.open_timeout = http.read_timeout = 10
+      http.open_timeout = http.read_timeout = 30
       http.use_ssl = url.kind_of?(URI::HTTPS)
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE if http.use_ssl
       http.start do |conn|

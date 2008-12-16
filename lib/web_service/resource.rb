@@ -34,7 +34,7 @@ module WebService
             end
             
             def #{res_name}=(collection)
-              #{res_name}.collection = collection
+              #{res_name}.cache = collection
             end
           }
         end

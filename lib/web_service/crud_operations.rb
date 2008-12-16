@@ -6,14 +6,19 @@ module WebService
     delegate :each, :to => :all
     
     def all(*args)
-      return @collection if @collection
+      return @cache if @cache
       expect(request(:get, *args), Net::HTTPOK) do |data|
         instantiate_several_from_http_response_data(data)
       end
     end
     
-    def collection=(collection)
-      @collection = collection.map { |res| instantiate_resource(res) }
+    def cache=(collection)
+      @cache = collection.map { |res| instantiate_resource(res) }
+    end
+    
+    def flush_cache
+      @cache = nil
+      self
     end
     
     def first(*args)
