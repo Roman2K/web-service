@@ -9,10 +9,13 @@ module WebService
     end
 
     def attributes=(attributes)
-      attribute_registry.clear
-      
       # Resolve single-key hash
-      attributes = attributes[self.class.element_name] if attributes.size == 1 && attributes[self.class.element_name]
+      if attributes.size == 1 && attributes[self.class.element_name]
+        attributes = attributes[self.class.element_name]
+      end
+      
+      # Clear previous attributes
+      attribute_registry.clear
       
       # Assign the ID first, so that it can be used while assigning the rest of the attributes
       if id_key = [:id, "id"].find { |key| attributes.include? key }

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class WebService::AttributeAccessorsTest < Test::Unit::TestCase
   class Resource
+    def self.element_name() "resource" end
     include WebService::AttributeAccessors
   end
   
