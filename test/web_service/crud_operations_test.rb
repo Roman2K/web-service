@@ -10,8 +10,9 @@ class WebService::CRUDOperationsTest < Test::Unit::TestCase
   def test_cache
     collection = Foo.new('id' => 1).bars
     
-    collection.cache = [{'id' => 1}, Bar.new('id' => 2)]
-    assert_equal [Bar.new('id' => 1), Bar.new('id' => 2)], collection.all
+    collection.cache = [{'id' => 1}, {'bar' => {'id' => 2}}, Bar.new('id' => 3)]
+    expected = [Bar.new('id' => 1), Bar.new('id' => 2), Bar.new('id' => 3)]
+    assert_equal expected, collection.all
     
     collection.flush_cache
     expect_request collection,
