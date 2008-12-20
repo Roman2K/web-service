@@ -10,9 +10,7 @@ module WebService
 
     def attributes=(attributes)
       # Resolve single-key hash
-      if attributes.size == 1 && attributes[self.class.element_name]
-        attributes = attributes[self.class.element_name]
-      end
+      attributes = attributes[self.class.element_name] if attributes.size == 1 && attributes[self.class.element_name]
       
       # Clear previous attributes
       attribute_registry.clear
@@ -63,7 +61,7 @@ module WebService
     
   private
     
-    TO_METHOD_NAME  = (String === Kernel.methods.first ? :to_s : :to_sym).to_proc
+    TO_METHOD_NAME  = (Kernel.methods.first.kind_of?(String) ? :to_s : :to_sym).to_proc
     METHOD_SUFFIXES = ["", "=", "?"]
     
     def attribute_registry
