@@ -63,6 +63,9 @@ module WebService
 
       # 404 Not Found
       class ResourceNotFound < ClientError; end # :nodoc:
+      
+      # 406 Not Acceptable
+      class NotAcceptable < ClientError; end # :nodoc:
 
       # 409 Conflict
       class ResourceConflict < ClientError; end # :nodoc:
@@ -112,6 +115,8 @@ module WebService
           raise(ResourceNotFound.new(response))
         when 405
           raise(MethodNotAllowed.new(response))
+        when 406
+          raise(NotAcceptable.new(response))
         when 409
           raise(ResourceConflict.new(response))
         when 422
