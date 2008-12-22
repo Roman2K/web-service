@@ -24,6 +24,8 @@ class Details < WebService::Resource
 end
 
 Test::Unit::TestCase.class_eval do
+  include TestUnitExt
+  
   def expect_request(resource_or_collection, method, path, details)
     connection  = stub
     response    = Net::HTTPResponse::CODE_TO_OBJ[details[:return][:status].to_s].new(*[stub_everything] * 3)

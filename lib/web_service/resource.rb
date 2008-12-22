@@ -129,12 +129,17 @@ module WebService
     end
     
     def build_association_collection_from_name(name)
-      type = begin
-        name.to_s.singularize.camelize.constantize
-      rescue NameError
-        name.to_s.camelize.constantize
-      end
-      type.instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
+      klass =
+        begin
+          name.to_s.singularize.camelize.constantize
+        rescue NameError => error_for_singular_form
+          begin
+            name.to_s.camelize.constantize
+          rescue NameError
+            raise error_for_singular_form
+          end
+        end
+      klass.instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
         extend NamedRequestMethods, CRUDOperations, NestingAsImplicitAttributes
     end
     
