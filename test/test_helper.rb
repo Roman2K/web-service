@@ -14,6 +14,7 @@ WebService.logger.level = Logger::ERROR
 
 class Foo < WebService::Resource
   has_many :bars
+  has_one  :bar
 end
 class Bar < WebService::Resource
   belongs_to :foo

@@ -28,15 +28,24 @@ module WebService
 
       def has_many(*resource_names)
         resource_names.each do |res_name|
-          class_eval %{
+          class_eval <<-RUBY
             def #{res_name}
-              association_collection_from_name %(#{res_name})
+              association_collection_from_name(#{res_name.to_sym.inspect})
             end
-            
             def #{res_name}=(collection)
               #{res_name}.cache = collection
             end
-          }
+          RUBY
+        end
+      end
+      
+      def has_one(*resource_names)
+        resource_names.each do |res_name|
+          class_eval <<-RUBY
+            def #{res_name}
+              association_collection_from_name(#{res_name.to_sym.inspect}).first
+            end
+          RUBY
         end
       end
       
