@@ -78,6 +78,13 @@ class WebService::ResourceTest < Test::Unit::TestCase
       :get, "/foos/1/bars",
       :return => {:status => "200", :body => {"bar" => {"a" => "b"}}}
     assert_equal Bar.new("a" => "b"), foo.bar
+    
+    # Plural-form resource type name
+    foo = Foo.new("id" => 1)
+    expect_request foo.instance_eval { association_collection_from_name(:details) },
+      :get, "/foos/1/details",
+      :return => {:status => "200", :body => {"details" => {"a" => "b"}}}
+    assert_equal Details.new("a" => "b"), foo.details
   end
   
 # public

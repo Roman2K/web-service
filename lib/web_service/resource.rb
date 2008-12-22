@@ -115,7 +115,7 @@ module WebService
     
     def association_collection_from_name(name)
       @association_collections ||= {}
-      @association_collections[name.to_s] ||= build_association_collection_from_name(name)
+      @association_collections[name.to_sym] ||= build_association_collection_from_name(name)
     end
     
   private
@@ -129,9 +129,12 @@ module WebService
     end
     
     def build_association_collection_from_name(name)
-      name.to_s.
-        singularize.camelize.constantize.
-        instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
+      type = begin
+        name.to_s.singularize.camelize.constantize
+      rescue NameError
+        name.to_s.camelize.constantize
+      end
+      type.instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
         extend NamedRequestMethods, CRUDOperations, NestingAsImplicitAttributes
     end
     

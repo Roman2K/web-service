@@ -15,9 +15,12 @@ WebService.logger.level = Logger::ERROR
 class Foo < WebService::Resource
   has_many :bars
   has_one  :bar
+  has_one  :details
 end
 class Bar < WebService::Resource
   belongs_to :foo
+end
+class Details < WebService::Resource
 end
 
 Test::Unit::TestCase.class_eval do
