@@ -4,13 +4,13 @@ module WebService
                                     [Symbol,  /^\//],     # Action
                                      Hash ].freeze        # Body
     
-    SERVER_EXCEPTIONS = [ Net::HTTPBadResponse,
-                          Net::HTTPHeaderSyntaxError,
-                          Net::ProtocolError,
-                          Errno::ECONNRESET,
-                          Errno::EINVAL,
-                          SocketError,
-                          IOError ].freeze
+    # http://github.com/thoughtbot/suspenders/tree/master/config/initializers/errors.rb
+    HTTP_ERRORS = [ EOFError,
+                    Errno::EINVAL,
+                    Errno::ECONNRESET,
+                    Net::ProtocolError,
+                    Net::HTTPBadResponse,
+                    Net::HTTPHeaderSyntaxError ].freeze
     
     attr_reader :resource_class
     attr_reader :nesting
@@ -105,7 +105,7 @@ module WebService
       yield
     rescue Timeout::Error
       raise TimeoutError.new($!.message)
-    rescue *SERVER_EXCEPTIONS
+    rescue *HTTP_ERRORS
       raise ConnectionError.new(nil, $!.message)
     end
     
