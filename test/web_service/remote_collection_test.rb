@@ -70,3 +70,45 @@ class WebService::RemoteCollectionTest < Test::Unit::TestCase
     assert_equal :other, symbol
   end
 end
+
+class WebService::RemoteCollection::ResponseDataUnserializationTest < Test::Unit::TestCase
+  class Response < Struct.new(:content_type, :body, :parse_count)
+    include WebService::RemoteCollection::ResponseDataUnserialization
+    
+    def parse_data
+      self.parse_count ||= 0
+      self.parse_count += 1
+      super
+    end
+  end
+  
+  def test_data
+    #################
+    #  Blank => nil
+    #################
+    response = Response.new
+    response.body = " "
+    assert_equal(nil, response.data)
+    
+    # Cache even nil
+    response.data
+    response.data
+    assert_equal(1, response.parse_count)
+    
+    #########
+    #  JSON
+    #########
+    response = Response.new
+    response.content_type = "application/json"
+    response.body = "{}"
+    assert_equal({}, response.data)
+    
+    #########
+    #  XML
+    #########
+    response = Response.new
+    response.content_type = "application/xml"
+    response.body = "<entries type='array'></entries>"
+    assert_equal({'entries' => []}, response.data)
+  end
+end

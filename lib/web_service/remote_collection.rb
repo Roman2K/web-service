@@ -134,15 +134,21 @@ module WebService
   
     module ResponseDataUnserialization
       def data
-        @data ||=
-          case content_type
-          when /json/
-            ActiveSupport::JSON.decode(body)
-          when /xml/
-            Hash.from_xml(body)
-          else
-            body
-          end
+        return @data if defined? @data
+        @data = parse_data
+      end
+      
+    private
+    
+      def parse_data
+        case content_type
+        when /json/
+          ActiveSupport::JSON.decode(body)
+        when /xml/
+          Hash.from_xml(body)
+        else
+          body.blank? ? nil : body
+        end
       end
     end
   end
