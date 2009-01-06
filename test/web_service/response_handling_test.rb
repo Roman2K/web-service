@@ -55,6 +55,7 @@ class WebService::ResponseHandlingTest < Test::Unit::TestCase
     end
     
     assert_raise_with_code[406, M::NotAcceptable]
+    assert_raise_with_code[502, M::BadGateway]
     assert_raise_with_code[503, M::ServiceUnavailable]
     assert_raise_with_code[504, M::GatewayTimeout]
     

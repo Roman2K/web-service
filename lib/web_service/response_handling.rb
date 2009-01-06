@@ -76,6 +76,9 @@ module WebService
       # 5xx Server Error
       class ServerError < ConnectionError; end # :nodoc:
       
+      # 502 Bad Gateway
+      class BadGateway < ServerError; end # :nodoc:
+      
       # 503 Service Unavailable
       class ServiceUnavailable < ServerError; end # :nodoc:
       
@@ -129,6 +132,8 @@ module WebService
           raise ResourceInvalid.new(response)
         when 401...500
           raise ClientError.new(response)
+        when 502
+          raise BadGateway.new(response)
         when 503
           raise ServiceUnavailable.new(response)
         when 504
