@@ -75,6 +75,12 @@ module WebService
 
       # 5xx Server Error
       class ServerError < ConnectionError; end # :nodoc:
+      
+      # 503 Service Unavailable
+      class ServiceUnavailable < ServerError; end # :nodoc:
+      
+      # 504 Gateway Timeout
+      class GatewayTimeout < ServerError; end # :nodoc:
 
       # 405 Method Not Allowed
       class MethodNotAllowed < ClientError # :nodoc:
@@ -123,6 +129,10 @@ module WebService
           raise ResourceInvalid.new(response)
         when 401...500
           raise ClientError.new(response)
+        when 503
+          raise ServiceUnavailable.new(response)
+        when 504
+          raise GatewayTimeout.new(response)
         when 500...600
           raise ServerError.new(response)
         else

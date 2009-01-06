@@ -166,4 +166,16 @@ class WebService::ResourceTest < Test::Unit::TestCase
       :return => {:status => "200", :body => {"foo" => {}}}
     foo.save
   end
+  
+  def test_reload
+    foo = Foo.new("id" => 1, "a" => "b")
+    expect_request foo,
+      :get, "/foos/1",
+      :return => {:status => 200, :body => {"foo" => {"id" => 1, "b" => "c"}}}
+    
+    result = foo.reload
+    
+    assert_equal Foo.new("id" => 1, "b" => "c"), foo
+    assert_equal foo.object_id, result.object_id
+  end
 end

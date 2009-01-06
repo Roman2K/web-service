@@ -4,7 +4,7 @@ class WebService::ResponseHandlingTest < Test::Unit::TestCase
   M = WebService::ResponseHandling
   
   def test_connection_error_message
-    error_type = M::Exceptions::ConnectionError
+    error_type = M::ConnectionError
     
     # Can't use stub since stub(:method => :result) doesn't respond_to?(:method)
     response = Object.new
@@ -47,10 +47,16 @@ class WebService::ResponseHandlingTest < Test::Unit::TestCase
   def test_handle_response
     handler = Object.new.extend M
     
-    response = stub(:code => 406)
-    assert_raise M::Exceptions::NotAcceptable do
-      handler.instance_eval { handle_response(response) }
+    assert_raise_with_code = lambda do |code, exc|
+      response = stub(:code => code)
+      assert_raise(exc) do
+        handler.instance_eval { handle_response(response) }
+      end
     end
+    
+    assert_raise_with_code[406, M::NotAcceptable]
+    assert_raise_with_code[503, M::ServiceUnavailable]
+    assert_raise_with_code[504, M::GatewayTimeout]
     
     response = stub(:code => 200)
     result = handler.instance_eval { handle_response(response) }

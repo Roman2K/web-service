@@ -92,6 +92,14 @@ module WebService
       respond_to?(:id) && id
     end
     
+    def reload
+      raise ResourceNotSaved unless saved?
+      id = self.id
+      [attribute_registry, association_registry].each &:clear
+      self.attributes = get(id)
+      return self
+    end
+    
     def destroy
       delete
       return self
