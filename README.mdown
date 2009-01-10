@@ -4,7 +4,7 @@ REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classe
 
 ## Installation
 
-RubyGem coming soon.
+    gem install Roman2K-web-service -s http://gems.github.com
 
 ## Usage example
 

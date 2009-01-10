@@ -7,7 +7,7 @@ Echoe.new('web-service', '0.1.0') do |p|
   p.email           = "roman.lenegrate@gmail.com"
   p.ignore_pattern  = "*.gemspec"
   p.dependencies    = ["activesupport", "Roman2K-class-inheritable-attributes"]
-  p.development_dependencies = []
+  p.development_dependencies = ["mocha"]
   p.rdoc_options    = %w(--main README.mdown --inline-source --line-numbers --charset UTF-8)
 end
 
