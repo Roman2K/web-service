@@ -23,7 +23,9 @@ module WebService
       end
 
       def belongs_to(*resource_names)
-        (@belongs_to ||= []).concat(resource_names)
+        @belongs_to ||= []
+        @belongs_to |= resource_names
+        @belongs_to
       end
 
       def has_many(*resource_names)

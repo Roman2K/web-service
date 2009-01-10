@@ -37,11 +37,11 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
     # a) Symbol
     res.assigned.clear
     res.attributes = {:bar => :foo, :id => 1, :foo => :bar}
-    assert_equal [:id, :foo, :bar], res.assigned
+    assert_equal [:bar, :foo, :id], res.assigned.sort_by(&:to_s)
     # b) String
     res.assigned.clear
     res.attributes = {:bar => :foo, "id" => 1, :foo => :bar}
-    assert_equal [:id, :foo, :bar], res.assigned
+    assert_equal [:bar, :foo, :id], res.assigned.sort_by(&:to_s)
   end
   
   def test_methods

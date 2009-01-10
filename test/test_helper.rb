@@ -4,7 +4,7 @@ require 'test_unit_ext'
 
 require 'net/http'
 Net::HTTP.class_eval do
-  undef :start
+  undef :start if method_defined? :start
 end
 
 require 'web_service'
