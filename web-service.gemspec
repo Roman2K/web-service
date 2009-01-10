@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.date = %q{2009-01-10}
   s.description = %q{REST client; an alternative to ActiveResource}
   s.email = %q{roman.lenegrate@gmail.com}
-  s.files = ["test/test_helper.rb", "test/web_service/attribute_accessors_test.rb", "test/web_service/core_ext_test.rb", "test/web_service/crud_operations_test.rb", "test/web_service/named_request_methods_test.rb", "test/web_service/remote_collection_test.rb", "test/web_service/resource_test.rb", "test/web_service/response_handling_test.rb", "test/web_service/site_test.rb"]
+  s.extra_rdoc_files = ["lib/web_service/attribute_accessors.rb", "lib/web_service/core_ext.rb", "lib/web_service/crud_operations.rb", "lib/web_service/named_request_methods.rb", "lib/web_service/remote_collection.rb", "lib/web_service/resource.rb", "lib/web_service/response_handling.rb", "lib/web_service/site.rb", "lib/web_service.rb", "LICENSE", "README.mdown"]
+  s.files = ["lib/web_service/attribute_accessors.rb", "lib/web_service/core_ext.rb", "lib/web_service/crud_operations.rb", "lib/web_service/named_request_methods.rb", "lib/web_service/remote_collection.rb", "lib/web_service/resource.rb", "lib/web_service/response_handling.rb", "lib/web_service/site.rb", "lib/web_service.rb", "LICENSE", "Manifest", "Rakefile", "README.mdown", "test/test_helper.rb", "test/web_service/attribute_accessors_test.rb", "test/web_service/core_ext_test.rb", "test/web_service/crud_operations_test.rb", "test/web_service/named_request_methods_test.rb", "test/web_service/remote_collection_test.rb", "test/web_service/resource_test.rb", "test/web_service/response_handling_test.rb", "test/web_service/site_test.rb", "web-service.gemspec"]
   s.has_rdoc = true
   s.homepage = %q{https://github.com/Roman2K/web-service}
   s.rdoc_options = ["--main", "README.mdown", "--inline-source", "--line-numbers", "--charset", "UTF-8"]
@@ -24,14 +25,14 @@ Gem::Specification.new do |s|
     s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<active_support>, [">= 0"])
-      s.add_runtime_dependency(%q<Roman2K-class_inheritable_attributes>, [">= 0"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 0"])
+      s.add_runtime_dependency(%q<Roman2K-class-inheritable-attributes>, [">= 0"])
     else
-      s.add_dependency(%q<active_support>, [">= 0"])
-      s.add_dependency(%q<Roman2K-class_inheritable_attributes>, [">= 0"])
+      s.add_dependency(%q<activesupport>, [">= 0"])
+      s.add_dependency(%q<Roman2K-class-inheritable-attributes>, [">= 0"])
     end
   else
-    s.add_dependency(%q<active_support>, [">= 0"])
-    s.add_dependency(%q<Roman2K-class_inheritable_attributes>, [">= 0"])
+    s.add_dependency(%q<activesupport>, [">= 0"])
+    s.add_dependency(%q<Roman2K-class-inheritable-attributes>, [">= 0"])
   end
 end
