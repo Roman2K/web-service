@@ -2,10 +2,6 @@
 
 REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classes/ActiveResource/Base.html).
 
-## Installation
-
-    gem install Roman2K-web-service -s http://gems.github.com
-
 ## Usage example
 
 Let's say you have a Rails app exposing a RESTful API for articles and their comments:
