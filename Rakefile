@@ -1,12 +1,12 @@
 require "echoe"
 
-Echoe.new('web-service', '0.1.0') do |p|
+Echoe.new('web-service', '0.1.0.1') do |p|
   p.description     = "REST client; an alternative to ActiveResource"
   p.url             = "https://github.com/Roman2K/web-service"
   p.author          = "Roman Le Négrate"
   p.email           = "roman.lenegrate@gmail.com"
   p.ignore_pattern  = "*.gemspec"
-  p.dependencies    = ["activesupport", "class-inheritable-attributes"]
+  p.dependencies    = ["activesupport >=2.2.2", "class-inheritable-attributes"]
   p.development_dependencies = ["mocha", "test-unit-ext"]
   p.rdoc_options    = %w(--main README.mdown --inline-source --line-numbers --charset UTF-8)
 end
