@@ -141,13 +141,25 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
   def test_association_writers
     bar = Resource.new
     
+    bar.foo = nil
     bar.foo = {"id" => 1}
     assert_equal Foo.new('id' => 1), bar.foo
     assert_equal 1, bar.foo_id
     
+    bar.foo = nil
     bar.foo = {"foo" => {"id" => 1}}
     assert_equal Foo.new('id' => 1), bar.foo
     assert_equal 1, bar.foo_id
+    
+    bar.foo = nil
+    bar.foo = {"bar" => {"id" => 1}}
+    assert_equal Bar.new('id' => 1), bar.foo
+    assert_equal 1, bar.foo_id
+    
+    bar.foo = nil
+    bar.foo = [{"bar" => {"id" => 1}}, 'other-value']
+    assert_equal [Bar.new('id' => 1), 'other-value'], bar.foo
+    assert_equal nil, bar.foo_id
     
     bar.foo = {"id" => 1}
     bar.foo = nil

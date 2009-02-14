@@ -1,3 +1,7 @@
+Object.class_eval do
+  undef :id if method_defined?(:id)
+end
+
 Array.class_eval do
   alias_method :index_without_block_form, :index
   def index(*args, &block)
@@ -10,10 +14,6 @@ Array.class_eval do
     end
   end
 end if Array.instance_method(:index).arity == 1
-
-Object.class_eval do
-  undef :id if method_defined?(:id)
-end
 
 def URI(object)
   URI === object ? object : URI.parse(object.to_s)

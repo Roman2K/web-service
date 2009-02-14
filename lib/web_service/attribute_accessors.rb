@@ -42,9 +42,19 @@ module WebService
     def write_attribute(attr_name, value)
       attr_name = attr_name.to_s
       send("#{$`}=", nil) if attr_name =~ /_id$/
-      value = value[attr_name] if Hash === value && value.size == 1 && value[attr_name]
+      resolve_record_descriptor = lambda { |descriptor|
+        if Hash === descriptor && descriptor.size == 1
+          if attributes = descriptor[attr_name]
+            attributes
+          elsif klass = resource_class_for?(descriptor.keys.first)
+            klass.new(descriptor.values.first)
+          end
+        end
+      }
+      value = resolve_record_descriptor[value] || (value.kind_of?(Array) and value.map { |elt| resolve_record_descriptor[elt] || elt }) || value
       if value.nil?
         attribute_registry["#{attr_name}_id"] = association_registry[attr_name] = nil
+        attribute_registry[attr_name] &&= nil
       elsif resource_class?(value.class)
         value.saved? or raise ResourceNotSaved, "resource must have an ID in order to be associated to another resource"
         attribute_registry["#{attr_name}_id"], association_registry[attr_name] = value.id, value
