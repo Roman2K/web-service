@@ -96,6 +96,9 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
     assert_raise ArgumentError do
       @res.foo("a")
     end
+    
+    @res.write_attribute("bool?", :value)
+    assert_equal :value, @res.bool?
   end
   
   def test_writers
@@ -103,16 +106,34 @@ class WebService::AttributeAccessorsTest < Test::Unit::TestCase
     
     # first value
     res.foo = :bar
-    assert_equal :bar, res.foo
+    assert_equal(:bar, res.foo)
+    assert_equal({"foo" => :bar}, res.attributes)
+    
+    # reset to nil...
+    res.foo = nil
+    assert_equal(nil, res.foo)
+    assert_equal({"foo" => nil}, res.attributes)
+    
+    # ...and back to a value
+    res.foo = :bar
+    assert_equal(:bar, res.foo)
+    assert_equal({"foo" => :bar}, res.attributes)
     
     # second value
     res.foo = :foo
-    assert_equal :foo, res.foo
+    assert_equal(:foo, res.foo)
+    assert_equal({"foo" => :foo}, res.attributes)
     
     # wrong number of arguments
     assert_raise ArgumentError do
       res.send(:foo=, "a", "b")
     end
+    
+    # first value is nil
+    res = Resource.new
+    res.nothing = nil
+    assert_equal(nil, res.nothing)
+    assert_equal({"nothing" => nil}, res.attributes)
   end
   
   ##########################

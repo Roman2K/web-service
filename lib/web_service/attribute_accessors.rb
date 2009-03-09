@@ -39,9 +39,12 @@ module WebService
       end
     end
     
+    def attribute_readable?(attr_name)
+      attribute_registry.key?(attr_name) || association_registry.key?(attr_name) || attribute_registry.key?("#{attr_name}_id")
+    end
+    
     def write_attribute(attr_name, value)
       attr_name = attr_name.to_s
-      send("#{$`}=", nil) if attr_name =~ /_id$/
       resolve_record_descriptor = lambda { |descriptor|
         if Hash === descriptor && descriptor.size == 1
           if attributes = descriptor[attr_name]
@@ -52,9 +55,11 @@ module WebService
         end
       }
       value = resolve_record_descriptor[value] || (value.kind_of?(Array) and value.map { |elt| resolve_record_descriptor[elt] || elt }) || value
+      association_registry[$`] &&= nil if attr_name =~ /_id$/
       if value.nil?
-        attribute_registry["#{attr_name}_id"] = association_registry[attr_name] = nil
-        attribute_registry[attr_name] &&= nil
+        attribute_registry[attr_name] = nil
+        attribute_registry["#{attr_name}_id"] &&= nil unless attr_name =~ /_id$/
+        association_registry[attr_name] &&= nil
       elsif resource_class?(value.class)
         value.saved? or raise ResourceNotSaved, "resource must have an ID in order to be associated to another resource"
         attribute_registry["#{attr_name}_id"], association_registry[attr_name] = value.id, value
@@ -85,10 +90,10 @@ module WebService
     def method_missing(method_id, *args)
       method_name = method_id.to_s
       case
-      when attribute_registry.key?(method_name) || association_registry.key?(method_name)
-        read_attribute(method_name, *args)
       when method_name =~ /=$/
         write_attribute($`, *args)
+      when attribute_readable?(method_name)
+        read_attribute(method_name, *args)
       when method_name =~ /\?$/
         super unless respond_to?($`)
         attribute_set?($`, *args)
