@@ -11,9 +11,12 @@ Echoe.new('web-service', '0.1.0.1') do |p|
   p.rdoc_options    = %w(--main README.mdown --inline-source --line-numbers --charset UTF-8)
 end
 
-# Weirdly enough, Echoe's default `test' task doesn't get overridden by the one defined
-# below. Even weirder, `rake test' runs both tasks! Dirty workaround:
-Rake.application.instance_eval("@tasks").delete("test")
+# Weirdly enough, Echoe's default `test' task doesn't get overridden by the one
+# defined below. Even weirder, `rake test' runs both tasks! The same applies to
+# `coverage'. Dirty workaround:
+%w(test coverage).each do |name|
+  Rake.application.instance_eval("@tasks").delete(name)
+end
 
 task :default => :test
 
