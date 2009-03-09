@@ -125,14 +125,14 @@ All of resource classes, resource instances and association collections respond 
 
 ## Status
 
-* Fetched resources should be cached in memory, so that the following returns true:
+*   Fetched resources should be cached in memory, so that the following returns true:
 
-      comments = article.comments
-      comments.all.object_id == comments.all.object_id
+        comments = article.comments
+        comments.all.object_id == comments.all.object_id
 
-* There are **tests** left to be written. Run `rake coverage` to find out what still has to be tested. Note that for RCov to work with Ruby 1.8.7, you might need to install the latest `rcov` gem from [GitHub](http://github.com/spicycode/rcov):
+*   There are **tests** left to be written. Run `rake coverage` to find out what still has to be tested. Note that for RCov to work with Ruby 1.8.7, you might need to install the latest `rcov` gem from [GitHub](http://github.com/spicycode/rcov):
 
-      gem install spicycode-rcov -s http://gems.github.com
+        gem install spicycode-rcov -s http://gems.github.com
 
 ## Credits
 
