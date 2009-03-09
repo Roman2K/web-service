@@ -28,7 +28,7 @@ module WebService
     end
     
     def respond_to?(method, include_private=false)
-      super || attribute_accessor_methods.include?(TO_METHOD_NAME[method])
+      super || attribute_accessor_methods.include?(MethodList::TO_METHOD_NAME[method])
     end
     
     def read_attribute(attr_name)
@@ -76,9 +76,6 @@ module WebService
     
   private
     
-    TO_METHOD_NAME  = (Kernel.methods.first.kind_of?(String) ? :to_s : :to_sym).to_proc
-    METHOD_SUFFIXES = ["", "=", "?"]
-    
     def attribute_registry
       @attributes ||= {}
     end
@@ -103,11 +100,7 @@ module WebService
     end
     
     def attribute_accessor_methods
-      METHOD_SUFFIXES.map do |suffix|
-        (attribute_registry.keys + association_registry.keys).map do |attr_name|
-          TO_METHOD_NAME["#{attr_name}#{suffix}"]
-        end
-      end.flatten
+      @attribute_accessor_methods ||= MethodList.new([attribute_registry, association_registry])
     end
     
     def resource_class_for(association_name)
@@ -128,6 +121,27 @@ module WebService
     
     def resource_class?(klass)
       Class === klass && klass.respond_to?(:find) && klass.public_method_defined?(:saved?)
+    end
+  end
+  
+  class MethodList
+    TO_METHOD_NAME  = (Kernel.methods.first.kind_of?(String) ? :to_s : :to_sym).to_proc
+    METHOD_SUFFIXES = ["", "=", "?"]
+    
+    include Enumerable
+    
+    def initialize(registries)
+      @registries = registries
+    end
+    
+    def each
+      METHOD_SUFFIXES.each do |suffix|
+        @registries.each do |registry|
+          registry.each_key do |attr_name|
+            yield TO_METHOD_NAME["#{attr_name}#{suffix}"]
+          end
+        end
+      end
     end
   end
 end
