@@ -1,6 +1,6 @@
 require "echoe"
 
-Echoe.new('web-service', '0.1.0.1') do |p|
+Echoe.new('web-service', '0.1.0.2') do |p|
   p.description     = "REST client; an alternative to ActiveResource"
   p.url             = "https://github.com/Roman2K/web-service"
   p.author          = "Roman Le Négrate"

@@ -77,7 +77,7 @@ module WebService
           value = value[0, 22] + '...' if String === value && value.length > 25
           "#{name}=#{value.inspect}" unless name == 'id'
         }.compact.sort
-      "#<#{type_with_id}#{" " + displayable_attributes_pairs * " " if displayable_attributes_pairs.any?}>"
+      "#<#{type_with_id}#{displayable_attributes_pairs.map { |pair| " " + pair }.join}>"
     end
     
     def ==(other)
