@@ -37,7 +37,7 @@ When building the corresponding client for this API to consume these resources, 
     article.title    # => "First article"
     article.title?   # => true
     article.title = " "
-    article.title?   # false
+    article.title?   # => false
     article.body     # raises NoMethodError
     article.body?    # raises NoMethodError
 
@@ -94,7 +94,7 @@ The same in a more formal way:
     comment = Comment.new(:body => "First comment.")
     comment.article = article
     comment.article == article  # => true
-    comment.article_id       # => 1
+    comment.article_id          # => 1
     comment.save
 
 ### Arbitrary actions
