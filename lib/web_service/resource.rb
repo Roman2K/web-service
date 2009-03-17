@@ -43,11 +43,17 @@ module WebService
       
       def has_one(*resource_names)
         resource_names.each do |res_name|
-          class_eval <<-RUBY
-            def #{res_name}
-              association_collection_from_name(#{res_name.to_sym.inspect}).first
-            end
-          RUBY
+          forwardings =
+            { "#{res_name}"       => :first,
+              "build_#{res_name}" => :build }
+          
+          forwardings.each do |from, to|
+            class_eval <<-RUBY
+              def #{from}(*args, &block)
+                association_collection_from_name(#{res_name.to_sym.inspect}, :singleton => true).#{to}(*args, &block)
+              end
+            RUBY
+          end
         end
       end
       
@@ -113,7 +119,8 @@ module WebService
     
     def remote_collection
       @remote_collection ||=
-        self.class.instance_eval { remote_collection }.with_nesting(nesting).
+        (@basic_remote_collection || self.class.instance_eval { remote_collection }).
+        with_nesting(nesting).
         extend(ImplicitID).set_related_resource(self)
     end
     
@@ -123,9 +130,9 @@ module WebService
     
   protected
     
-    def association_collection_from_name(name)
+    def association_collection_from_name(name, options={})
       @association_collections ||= {}
-      @association_collections[name.to_sym] ||= build_association_collection_from_name(name)
+      @association_collections[name.to_sym] ||= build_association_collection_from_name(name, options)
     end
     
   private
@@ -138,18 +145,15 @@ module WebService
       nesting + [[self.class.element_name, id]]
     end
     
-    def build_association_collection_from_name(name)
-      klass =
-        begin
-          name.to_s.singularize.camelize.constantize
-        rescue NameError => error_for_singular_form
-          begin
-            name.to_s.camelize.constantize
-          rescue NameError
-            raise error_for_singular_form
-          end
-        end
-      klass.instance_eval { remote_collection }.with_nesting(nesting_up_to_self).
+    def build_association_collection_from_name(name, options={})
+      if options[:singleton]
+        klass = name.to_s.camelize.constantize
+        klass.singleton ? klass : Class.new(klass) { self.singleton = true }
+      else
+        name.to_s.singularize.camelize.constantize
+      end.
+        instance_eval { remote_collection }.
+        with_nesting(nesting_up_to_self).
         extend NamedRequestMethods, CRUDOperations, NestingAsImplicitAttributes
     end
     

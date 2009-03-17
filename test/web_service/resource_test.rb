@@ -43,6 +43,12 @@ class WebService::ResourceTest < Test::Unit::TestCase
   def test_has_many
     foo = Foo.new("id" => 1)
     
+    expect_creation_on = lambda do |collection|
+      expect_request collection,
+        :post, "/foos/1/bars", :body => {"bar" => {"foo_id" => 1, "a" => "b"}},
+        :return => {:status => "201", :body => {"bar" => {"c" => "d"}}}
+    end
+    
     # Instantiation
     bar = foo.bars.build("a" => "b")
     assert_equal({"foo_id" => 1, "a" => "b"}, bar.attributes)
@@ -53,11 +59,14 @@ class WebService::ResourceTest < Test::Unit::TestCase
       :return => {:status => "200", :body => []}
     foo.bars.all
     
-    # Creation
-    expect_request foo.bars,
-      :post, "/foos/1/bars", :body => {"bar" => {"foo_id" => 1, "a" => "b"}},
-      :return => {:status => "201", :body => {"bar" => {"c" => "d"}}}
+    # Creation (bars.create)
+    expect_creation_on[foo.bars]
     foo.bars.create("a" => "b")
+    
+    # Creation (bars.build.save)
+    bar = foo.bars.build "a" => "b"
+    expect_creation_on[bar]
+    bar.save
     
     # Arbitrary actions
     expect_request foo.bars,
@@ -73,20 +82,30 @@ class WebService::ResourceTest < Test::Unit::TestCase
   end
   
   def test_has_one
+    # Fetching
     foo = Foo.new("id" => 1)
-    expect_request foo.instance_eval { association_collection_from_name(:bar) },
-      :get, "/foos/1/bars",
+    expect_request foo.instance_eval { association_collection_from_name(:bar, :singleton => true) },
+      :get, "/foos/1/bar",
       :return => {:status => "200", :body => {"bar" => {"a" => "b"}}}
     assert_equal Bar.new("a" => "b"), foo.bar
     
+    # Building + saving = creating
+    foo = Foo.new("id" => 1)
+    bar = foo.build_bar("a" => "b")
+    expect_request bar,
+      :post, "/foos/1/bar", :body => {"bar" => {"foo_id" => 1, "a" => "b"}},
+      :return => {:status => "201", :body => {"bar" => {"c" => "d"}}}
+    assert_equal Bar.new("c" => "d"), bar.save
+    
     # Plural-form resource class name
     foo = Foo.new("id" => 1)
-    expect_request foo.instance_eval { association_collection_from_name(:details) },
+    expect_request foo.instance_eval { association_collection_from_name(:details, :singleton => true) },
       :get, "/foos/1/details",
       :return => {:status => "200", :body => {"details" => {"a" => "b"}}}
     assert_equal Details.new("a" => "b"), foo.details
     
-    assert_raise NameError, /uninitialized constant Thing\b/ do
+    # Constant name resolution
+    assert_raise NameError, /uninitialized constant Things\b/ do
       Class.new(Foo) { has_one :things }.new.things
     end
   end

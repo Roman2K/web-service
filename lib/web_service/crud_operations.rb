@@ -95,7 +95,20 @@ module WebService
     
     def instantiate_resource(*args, &block)
       klass = respond_to?(:new) ? self : resource_class
-      args.size == 1 && !block && klass === args.first ? args.first : klass.new(*args, &block)
+      
+      # TODO  Fix the need that hack:
+      #
+      #       It makes has_one saves work, as foo.bar builds a subclass of Bar
+      #       with singleton=true so that the RemoteCollection of foo.bar will
+      #       make POST requests to /foos/1/bar instead of /foos/1/bars.
+      #
+      #       See Resource#remote_collection
+      #
+      basic_collection = self if respond_to?(:resource_class) && resource_class.name.to_s.empty?
+      
+      resource = args.size == 1 && !block && klass === args.first ? args.first : klass.new(*args, &block)
+      resource.instance_variable_set(:@basic_remote_collection, basic_collection)
+      return resource
     end
   end
 end
