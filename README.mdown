@@ -2,6 +2,14 @@
 
 REST client. Alternative to [`ActiveResource`](http://api.rubyonrails.org/classes/ActiveResource/Base.html).
 
+## Installation
+
+Since `WebService` depends on the gem `class-inheritable-attributes` is hosted on GitHub, the author's account name has to be prepended to the actual gem name so that dependency must be installed manually first: see the [`README`](http://github.com/Roman2K/class-inheritable-attributes/tree) of `class-inheritable-attributes`.
+
+Then, install the `web-service` gem itself:
+
+    $ gem install Roman2K-web-service -s http://gems.github.com/
+
 ## Usage example
 
 Let's say you have a Rails app exposing a RESTful API for articles and their comments:
