@@ -142,6 +142,3 @@ All of resource classes, resource instances and association collections respond 
 
         gem install spicycode-rcov -s http://gems.github.com
 
-## Credits
-
-Written by [Roman Le Négrate](http://roman.flucti.com) ([contact](mailto:roman.lenegrate@gmail.com)). Released under the MIT license: see the `LICENSE` file.
